@@ -1,6 +1,6 @@
 # Payment-API
 Desafio dio payment-api
-## INSTRUÇÕES PARA O TESTE TÉCNICO
+
 
 ## O DESAFIO
 - Construir uma API REST utilizando .Net Core, Java ou NodeJs (com Typescript);
