@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using payment_api_desafio.Context;
 
@@ -11,9 +12,11 @@ using payment_api_desafio.Context;
 namespace paymentapidesafio.Migrations
 {
     [DbContext(typeof(VendasContext))]
-    partial class VendasContextModelSnapshot : ModelSnapshot
+    [Migration("20221121130110_TabelasBancoItemList")]
+    partial class TabelasBancoItemList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,7 +107,7 @@ namespace paymentapidesafio.Migrations
             modelBuilder.Entity("payment_api_desafio.Models.Venda", b =>
                 {
                     b.HasOne("payment_api_desafio.Models.Item", "Itens")
-                        .WithMany()
+                        .WithMany("Itens")
                         .HasForeignKey("ItensId");
 
                     b.HasOne("payment_api_desafio.Models.Vendedor", "Vendedor")
@@ -114,6 +117,11 @@ namespace paymentapidesafio.Migrations
                     b.Navigation("Itens");
 
                     b.Navigation("Vendedor");
+                });
+
+            modelBuilder.Entity("payment_api_desafio.Models.Item", b =>
+                {
+                    b.Navigation("Itens");
                 });
 #pragma warning restore 612, 618
         }

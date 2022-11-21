@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using payment_api_desafio.Context;
 
@@ -11,9 +12,11 @@ using payment_api_desafio.Context;
 namespace paymentapidesafio.Migrations
 {
     [DbContext(typeof(VendasContext))]
-    partial class VendasContextModelSnapshot : ModelSnapshot
+    [Migration("20221121124826_TesteDoc")]
+    partial class TesteDoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,22 @@ namespace paymentapidesafio.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("payment_api_desafio.Models.Blog", b =>
+                {
+                    b.Property<int>("BlogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlogId"));
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BlogId");
+
+                    b.ToTable("Blog");
+                });
 
             modelBuilder.Entity("payment_api_desafio.Models.Item", b =>
                 {
@@ -44,6 +63,30 @@ namespace paymentapidesafio.Migrations
                     b.ToTable("Item");
                 });
 
+            modelBuilder.Entity("payment_api_desafio.Models.Post", b =>
+                {
+                    b.Property<int>("PostId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostId"));
+
+                    b.Property<int>("BlogId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PostId");
+
+                    b.HasIndex("BlogId");
+
+                    b.ToTable("Post");
+                });
+
             modelBuilder.Entity("payment_api_desafio.Models.Venda", b =>
                 {
                     b.Property<int>("Id")
@@ -55,7 +98,7 @@ namespace paymentapidesafio.Migrations
                     b.Property<DateTime>("DataVenda")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ItensId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -69,7 +112,7 @@ namespace paymentapidesafio.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItensId");
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("VendedorId");
 
@@ -101,19 +144,40 @@ namespace paymentapidesafio.Migrations
                     b.ToTable("Vendedor");
                 });
 
+            modelBuilder.Entity("payment_api_desafio.Models.Post", b =>
+                {
+                    b.HasOne("payment_api_desafio.Models.Blog", "Blog")
+                        .WithMany("Posts")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Blog");
+                });
+
             modelBuilder.Entity("payment_api_desafio.Models.Venda", b =>
                 {
-                    b.HasOne("payment_api_desafio.Models.Item", "Itens")
-                        .WithMany()
-                        .HasForeignKey("ItensId");
+                    b.HasOne("payment_api_desafio.Models.Item", "Item")
+                        .WithMany("Itens")
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("payment_api_desafio.Models.Vendedor", "Vendedor")
                         .WithMany()
                         .HasForeignKey("VendedorId");
 
-                    b.Navigation("Itens");
+                    b.Navigation("Item");
 
                     b.Navigation("Vendedor");
+                });
+
+            modelBuilder.Entity("payment_api_desafio.Models.Blog", b =>
+                {
+                    b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("payment_api_desafio.Models.Item", b =>
+                {
+                    b.Navigation("Itens");
                 });
 #pragma warning restore 612, 618
         }

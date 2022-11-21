@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using payment_api_desafio.Context;
 
@@ -11,9 +12,11 @@ using payment_api_desafio.Context;
 namespace paymentapidesafio.Migrations
 {
     [DbContext(typeof(VendasContext))]
-    partial class VendasContextModelSnapshot : ModelSnapshot
+    [Migration("20221121125010_TabelasBancoItem")]
+    partial class TabelasBancoItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace paymentapidesafio.Migrations
                     b.Property<DateTime>("DataVenda")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ItensId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -69,7 +72,7 @@ namespace paymentapidesafio.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ItensId");
+                    b.HasIndex("ItemId");
 
                     b.HasIndex("VendedorId");
 
@@ -103,17 +106,22 @@ namespace paymentapidesafio.Migrations
 
             modelBuilder.Entity("payment_api_desafio.Models.Venda", b =>
                 {
-                    b.HasOne("payment_api_desafio.Models.Item", "Itens")
-                        .WithMany()
-                        .HasForeignKey("ItensId");
+                    b.HasOne("payment_api_desafio.Models.Item", "Item")
+                        .WithMany("Itens")
+                        .HasForeignKey("ItemId");
 
                     b.HasOne("payment_api_desafio.Models.Vendedor", "Vendedor")
                         .WithMany()
                         .HasForeignKey("VendedorId");
 
-                    b.Navigation("Itens");
+                    b.Navigation("Item");
 
                     b.Navigation("Vendedor");
+                });
+
+            modelBuilder.Entity("payment_api_desafio.Models.Item", b =>
+                {
+                    b.Navigation("Itens");
                 });
 #pragma warning restore 612, 618
         }

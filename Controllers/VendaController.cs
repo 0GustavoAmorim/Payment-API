@@ -19,6 +19,7 @@ namespace payment_api_desafio.Controllers
         [HttpGet("{id}")]
         public IActionResult ObterPorId(int id)
         {
+            //List<Item> itens = _context.Item.Where(x => x.Id == id).ToList();
             var venda = (from Venda in _context.Venda
                                         join i in _context.Item on Venda.Id equals i.Id
                                         join v in _context.Vendedor on Venda.Vendedor.Id equals v.Id
@@ -27,9 +28,14 @@ namespace payment_api_desafio.Controllers
                                         {
                                             Id = Venda.Id,
                                             DataVenda = Venda.DataVenda,
-                                            Valor = i.Valor * i.Quantidade,
+                                            ValorVenda = i.Valor * i.Quantidade,
                                             Vendedor = v.Nome,
-                                            Itens = i.NomeItem,
+                                            CpfVendedor = v.Cpf,
+                                            Email = v.Email,
+                                            Telefone = v.Telefone,
+                                            Item = i.NomeItem,
+                                            Valor = i.Valor,
+                                            Quantidade = i.Quantidade,
                                             Status = Venda.Status
                                         }
                                     );
